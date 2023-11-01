@@ -30,11 +30,10 @@ public class CombinationsIterator {
             for (int i = 0; i < wordLength; i++) {
                 this.state[i] = symbols.get(0);
             }
-            return Arrays.copyOf(state, wordLength);
         } else {
             increment(0);
-            return Arrays.copyOf(state, wordLength);
         }
+        return Arrays.copyOf(state, wordLength);
     }
 
     public boolean hasNext() {

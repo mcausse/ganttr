@@ -10,9 +10,7 @@ public class GanttSolution {
 
     public GanttSolution(List<User> users) {
         this.userSolution = new LinkedHashMap<>();
-        users.forEach(u -> {
-            userSolution.put(u, new StringBuilder(u.daysPattern));
-        });
+        users.forEach(u -> userSolution.put(u, new StringBuilder(u.daysPattern)));
     }
 
     protected boolean isUnassignedDay(User user, int nthDay) {

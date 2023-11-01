@@ -27,11 +27,9 @@ public class FinishAsapSolutionsProcessor implements SolutionsProcessor {
 
         int daysToFinish = calculateDaysToFinish(solution);
         int workingUsers = calculateWorkingUsers(solution);
-
         int score = calculateScore(daysToFinish, workingUsers);
 
         if (this.showToSout) {
-            System.out.println("#" + numCombinationsExplored);
             System.out.println(Arrays.toString(combination));
             System.out.println(solution);
             System.out.println("days to finish: " + daysToFinish);
@@ -64,7 +62,6 @@ public class FinishAsapSolutionsProcessor implements SolutionsProcessor {
 
         int daysToFinish = calculateDaysToFinish(bestScoredSolution);
         int workingUsers = calculateWorkingUsers(bestScoredSolution);
-
         int score = calculateScore(daysToFinish, workingUsers);
 
         System.out.println("days to finish: " + daysToFinish);
