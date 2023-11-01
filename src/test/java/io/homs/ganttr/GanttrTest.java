@@ -40,8 +40,7 @@ class GanttrTest {
         GanttSolution solution = gantt.calculateCombination(new int[]{4, 1, 0, 2, 3});
 
         assertThat(solution).hasToString(
-                "" +
-                        "mh: .....||3333.||||...||\n" +
+                "mh: .....||3333.||||...||\n" +
                         "jh: ||.22||.....||.....||\n" +
                         "jc: .....||||444||44...||\n" +
                         "pb: 5....|||||||||.....||\n" +
@@ -75,8 +74,7 @@ class GanttrTest {
         gantt.gantterize();
 
         assertThat(solutionsProcessor.getBestScoredSolution()).hasToString(
-                "" +
-                        "mh: 1115.||44444||||...||\n" +
+                "mh: 1115.||44444||||...||\n" +
                         "jh: ||.22||3333.||.....||\n" +
                         "jc: .....||||...||.....||\n" +
                         "pb: .....|||||||||.....||\n" +
@@ -103,8 +101,7 @@ class GanttrTest {
         gantt.gantterize();
 
         assertThat(solutionsProcessor.getBestScoredSolution()).hasToString(
-                "" +
-                        "mh: ||...||.||..||.....||\n" +
+                "mh: ||...||.||..||.....||\n" +
                         "jh: 11111||1|111||1....||\n"
         );
     }
@@ -129,14 +126,13 @@ class GanttrTest {
         gantt.gantterize();
 
         assertThat(solutionsProcessor.getBestScoredSolution()).hasToString(
-                "" +
-                        "mh: ||222||2||22||22...||\n" +
+                "mh: ||222||2||22||22...||\n" +
                         "jh: 11111||1|111||11...||\n"
         );
     }
 
     @Test
-    void handle_tasks_tree_joins_as_fucking_graph() {
+    void handle_tasks_tree_joins_as_graph() {
 
         var mh = new User("mh", ".....||.....||.....||");
         var jh = new User("jh", ".....|||....||.....||");
@@ -156,13 +152,8 @@ class GanttrTest {
         gantt.gantterize();
 
         assertThat(solutionsProcessor.getBestScoredSolution()).hasToString(
-                "" +
-                        "mh: 11133||33...||.....||\n" +
-                        "jh: 2222.|||....||.....||\n"
-
-                // TODO ha de donar:
-//                "mh: 111.3||3....||.....||\n" +
-//                "jh: 2222.|||....||.....||\n"
+                "mh: 22223||3....||.....||\n" +
+                        "jh: 111..|||....||.....||\n"
         );
     }
 }

@@ -8,6 +8,16 @@ public class FinishAsapSolutionsProcessor implements SolutionsProcessor {
     private int bestScore = -1;
     private GanttSolution bestScoredSolution = null;
 
+    private final boolean showToSout;
+
+    public FinishAsapSolutionsProcessor(boolean showToSout) {
+        this.showToSout = showToSout;
+    }
+
+    public FinishAsapSolutionsProcessor() {
+        this(true);
+    }
+
     private static int calculateScore(int daysToFinish, int workingUsers) {
         return (1_000 - daysToFinish) * 10 + (100 - workingUsers);
     }
@@ -15,20 +25,25 @@ public class FinishAsapSolutionsProcessor implements SolutionsProcessor {
     @Override
     public void process(int numCombinationsExplored, int[] combination, GanttSolution solution) {
 
-        System.out.println("#" + numCombinationsExplored);
-        System.out.println(Arrays.toString(combination));
-        System.out.println(solution);
-
         int daysToFinish = calculateDaysToFinish(solution);
         int workingUsers = calculateWorkingUsers(solution);
 
         int score = calculateScore(daysToFinish, workingUsers);
 
-        System.out.println("days to finish: " + daysToFinish);
-        System.out.println("working users:  " + workingUsers);
-        System.out.println("-----------------");
-        System.out.println("score:          " + score);
-        System.out.println();
+        if (this.showToSout) {
+            System.out.println("#" + numCombinationsExplored);
+            System.out.println(Arrays.toString(combination));
+            System.out.println(solution);
+            System.out.println("days to finish: " + daysToFinish);
+            System.out.println("working users:  " + workingUsers);
+            System.out.println("-----------------");
+            System.out.println("score:          " + score);
+            System.out.println();
+        } else {
+            if (numCombinationsExplored % 10_000 == 0) {
+                System.out.println("# explored combinations: " + numCombinationsExplored);
+            }
+        }
 
         if (this.bestScore < score) {
             this.bestScore = score;

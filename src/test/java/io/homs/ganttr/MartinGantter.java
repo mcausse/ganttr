@@ -25,12 +25,23 @@ public class MartinGantter {
         var t0 = new Task('0', "SAD", 1);
 
         var gantt = new Ganttr(
-                new FinishAsapSolutionsProcessor(),
+                new FinishAsapSolutionsProcessor(false),
                 List.of(mh, jh, jc, pb, rc),
                 List.of(t1, t2, t3, t4, t5, t6, t7, t8, t9, t0)
         );
         gantt.gantterize();
+
+        //        total combinations explored: 9765625
+        //
+        //        mh: 0..22||33337||||999||9
+        //        jh: ||...||44444||88...||
+        //        jc: 111..||||666||.....||
+        //        pb: .....|||||||||.....||
+        //        rc: .....||||555||...|.||
+        //
+        //        days to finish: 22
+        //        working users:  4
+        //        -----------------
+        //        score:          9876
     }
-
-
 }

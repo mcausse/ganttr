@@ -6,18 +6,18 @@ public class Ganttr {
 
     private final SolutionsProcessor solutionsProcessor;
     private final List<User> users;
-    private final GanttTasksList tasksList;
+    private final List<Task> tasksList;
 
-    public Ganttr(SolutionsProcessor solutionsProcessor, List<User> users, List<Task> tasks) {
+    public Ganttr(SolutionsProcessor solutionsProcessor, List<User> users, List<Task> taskList) {
         this.solutionsProcessor = solutionsProcessor;
         this.users = users;
-        this.tasksList = new GanttTasksList(tasks);
+        this.tasksList = taskList;
     }
 
     public void gantterize() {
 
         // combination[#task] => #user
-        var combinationsGen = CombinationsIterator.of(tasksList.getNumTasks(), 0, users.size());
+        var combinationsGen = CombinationsIterator.of(tasksList.size(), 0, users.size());
         int numCombinationsExplored = 0;
         while (combinationsGen.hasNext()) {
             var combination = combinationsGen.getNext();
@@ -33,24 +33,28 @@ public class Ganttr {
     }
 
     protected GanttSolution calculateCombination(int[] combination) {
-
         var solution = new GanttSolution(users);
-        List<Task> initialTasks = tasksList.getInitialTasks();
-        int daysOffset = 0;
-        r(combination, solution, initialTasks, daysOffset);
+        var t = new GanttTasksIterator(tasksList);
 
-        return solution;
-    }
+        var task = t.getNextTaskToProcess();
+        while (task != null) {
 
-    protected void r(int[] combination, GanttSolution solution, List<Task> tasks, int daysOffset) {
-        for (var task : tasks) {
-            int taskCombinationIndex = tasksList.getIndexOfTask(task);
+            int taskStartingDay = 0;
+            for (var dep : task.dependencies) {
+                int depEndingDay = t.getProcessedTaskEndingDay(dep);
+                if (taskStartingDay < depEndingDay) {
+                    taskStartingDay = depEndingDay;
+                }
+            }
+
+            int taskCombinationIndex = tasksList.indexOf(task);
             int userIndex = combination[taskCombinationIndex];
             User userToExecuteTheTask = users.get(userIndex);
-            int nextDaysOffset = solution.addTaskTo(userToExecuteTheTask, task, daysOffset);
+            int taskEndingDay = solution.addTaskTo(userToExecuteTheTask, task, taskStartingDay);
+            t.markTaskAsProcessedEndingAtDay(task, taskEndingDay);
 
-            // recursion
-            r(combination, solution, tasksList.getNextTasksOf(task), nextDaysOffset);
+            task = t.getNextTaskToProcess();
         }
+        return solution;
     }
 }
