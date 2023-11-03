@@ -6,19 +6,21 @@ public class Ganttr {
 
     private final SolutionsProcessor solutionsProcessor;
     private final List<User> users;
-    private final List<Task> tasksList;
+    private final List<Task> tasks;
 
-    public Ganttr(SolutionsProcessor solutionsProcessor, List<User> users, List<Task> taskList) {
+    public Ganttr(SolutionsProcessor solutionsProcessor, List<User> users, List<Task> tasks) {
         this.solutionsProcessor = solutionsProcessor;
         this.users = users;
-        this.tasksList = taskList;
+        this.tasks = tasks;
     }
 
     public void gantterize() {
 
+        long totalCombinationsToExplore = (long) Math.pow(users.size(), tasks.size());
+
         // combination[#task] => #user
-        var combinationsGen = CombinationsIterator.of(tasksList.size(), 0, users.size());
-        int numCombinationsExplored = 0;
+        var combinationsGen = CombinationsIterator.of(tasks.size(), 0, users.size());
+        long numCombinationsExplored = 0;
         while (combinationsGen.hasNext()) {
             var combination = combinationsGen.getNext();
             GanttSolution solution = calculateCombination(combination);
@@ -26,15 +28,16 @@ public class Ganttr {
             solutionsProcessor.process(numCombinationsExplored, combination, solution);
 
             numCombinationsExplored++;
+            if (numCombinationsExplored % 1_000_000 == 0) {
+                System.out.println((100L * numCombinationsExplored) / totalCombinationsToExplore + "% of " + totalCombinationsToExplore + " combinations");
+            }
         }
-        System.out.println();
-        System.out.println("total combinations explored: " + numCombinationsExplored);
-        solutionsProcessor.finish();
+        solutionsProcessor.finish(users, tasks, numCombinationsExplored);
     }
 
     protected GanttSolution calculateCombination(int[] combination) {
         var solution = new GanttSolution(users);
-        var t = new GanttTasksIterator(tasksList);
+        var t = new GanttTasksIterator(tasks);
 
         var task = t.getNextTaskToProcess();
         while (task != null) {
@@ -47,7 +50,7 @@ public class Ganttr {
                 }
             }
 
-            int taskCombinationIndex = tasksList.indexOf(task);
+            int taskCombinationIndex = tasks.indexOf(task);
             int userIndex = combination[taskCombinationIndex];
             User userToExecuteTheTask = users.get(userIndex);
             int taskEndingDay = solution.addTaskTo(userToExecuteTheTask, task, taskStartingDay);

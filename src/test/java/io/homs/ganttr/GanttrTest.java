@@ -174,7 +174,7 @@ class GanttrTest {
         var t6 = new Task('6', "", 3, t4);
         var t7 = new Task('7', "", 3, t5, t6);
 
-        FinishAsapSolutionsProcessor solutionsProcessor = new FinishAsapSolutionsProcessor(false);
+        FinishAsapSolutionsProcessor solutionsProcessor = new FinishAsapSolutionsProcessor(true);
         var gantt = new Ganttr(
                 solutionsProcessor,
                 List.of(mh, jh, jc, pb, rc),

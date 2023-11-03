@@ -1,8 +1,10 @@
 package io.homs.ganttr;
 
+import io.homs.ganttr.ga.G;
+
 import java.util.List;
 
-public class MartinGantter {
+public class CorrelationAcksGantter {
 
     public static void main(String[] args) {
 
@@ -11,6 +13,7 @@ public class MartinGantter {
         var jc = new User("jc", ".....||||...||.....||");
         var pb = new User("pb", ".....|||||||||.....||");
         var rc = new User("rc", ".....||||...||...|.||");
+        var qh = new User("qh", ".|.|.|.||.|.||.|.|.||");
 
         var t1 = new Task('1', "entities & repositories", 3);
         var t2 = new Task('2', "service", 2, t1);
@@ -26,10 +29,10 @@ public class MartinGantter {
 
         var gantt = new Ganttr(
                 new FinishAsapSolutionsProcessor(false),
-                List.of(mh, jh, jc, pb, rc),
+                List.of(mh, jh, jc, pb, rc, qh),
                 List.of(t1, t2, t3, t4, t5, t6, t7, t8, t9, t0)
         );
-        gantt.gantterize();
+//        gantt.gantterize();
 
         //        total combinations explored: 9765625
         //
@@ -43,5 +46,18 @@ public class MartinGantter {
         //        working users:  4
         //        -----------------
         //        score:          9876
+
+        G g = new G(
+                List.of(mh, jh, jc, pb, rc, qh),
+                List.of(t1, t2, t3, t4, t5, t6, t7, t8, t9, t0)
+        );
+        g.run(1000, 10000);
+
+        //        mh: 111..||33337||||999||9
+        //        jh: ||.22||44444||88...||
+        //        jc: 0....||||666||.....||
+        //        pb: .....|||||||||.....||
+        //        rc: .....||||555||...|.||
+        //        qh: .|.|.|.||.|.||.|.|.||
     }
 }

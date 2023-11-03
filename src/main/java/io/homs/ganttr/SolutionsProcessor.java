@@ -1,8 +1,10 @@
 package io.homs.ganttr;
 
+import java.util.List;
+
 public interface SolutionsProcessor {
 
-    void process(int numCombinationsExplored, int[] combination, GanttSolution solution);
+    void process(long numCombinationsExplored, int[] combination, GanttSolution solution);
 
-    void finish();
+    void finish(List<User> users, List<Task> taskList, long numCombinationsExplored);
 }

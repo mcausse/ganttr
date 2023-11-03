@@ -57,6 +57,41 @@ public class GanttSolution {
         return userSolution;
     }
 
+    public int calculateDaysToFinish() {
+        int r = 0;
+
+        for (StringBuilder pattern : getUserSolution().values()) {
+            for (int day = 0; day < pattern.length(); day++) {
+                if (r < day && dayFilledWithTask(pattern, day)) {
+                    r = day;
+                }
+            }
+        }
+
+        return r + 1;
+    }
+
+    public int calculateWorkingUsers() {
+        int users = 0;
+
+        for (Map.Entry<User, StringBuilder> entry : getUserSolution().entrySet()) {
+            StringBuilder pattern = entry.getValue();
+            for (int day = 0; day < pattern.length(); day++) {
+                if (dayFilledWithTask(pattern, day)) {
+                    users++;
+                    break;
+                }
+            }
+        }
+
+        return users;
+    }
+
+    protected boolean dayFilledWithTask(StringBuilder pattern, int nthDay) {
+        char c = pattern.charAt(nthDay);
+        return c != User.EMPTY_WORKING_DAY_CHAR && c != User.DAY_OFF_CHAR;
+    }
+
     @Override
     public String toString() {
         var r = new StringBuilder();
