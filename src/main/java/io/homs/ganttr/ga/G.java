@@ -76,11 +76,12 @@ public class G {
     protected Individual mutate(Individual individual) {
         int[] combination = Arrays.copyOf(individual.combination, individual.combination.length);
 
-        while (rnd.nextInt(100) < 25) {
+        do {
             int indexToMutate = rnd.nextInt(tasks.size());
             int mutatedValue = rnd.nextInt(users.size());
             combination[indexToMutate] = mutatedValue;
-        }
+        } while (rnd.nextInt(100) < 25);
+
         return new Individual(combination);
     }
 
@@ -93,7 +94,6 @@ public class G {
     }
 
     protected static int calculateScore(int daysToFinish, int workingUsers) {
-//        return (1_000 - daysToFinish) * 10 + (100 - workingUsers);
         return daysToFinish * 10 + workingUsers;
     }
 
