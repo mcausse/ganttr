@@ -1,6 +1,8 @@
-package io.homs.ganttr;
+package io.homs.ganttr.realcases;
 
-import io.homs.ganttr.ga.G;
+import io.homs.ganttr.Task;
+import io.homs.ganttr.User;
+import io.homs.ganttr.ga.GeneticGanttr;
 
 import java.util.List;
 
@@ -15,6 +17,15 @@ public class MMGantter {
         var jc = new User("jc", "|||||||||||||||||||||.....||.....||.....||.....||.....||.....||.....||.....||");
         var qh = new User("qh", ".....||||||||||....||.....||.....||.....||.....||.....||.....||.....||.....||");
 
+
+        //        ============================================================
+        //        PHASE 2: Skeleton & deployment
+        //        ============================================================
+
+        var ta = new Task('a', "[DevOps] new repo or add to OpenCONNECT? Jenkins, reports, coverage, etc.", 1);
+        var tb = new Task('b', "[MM] new MM project skeleton", 4);
+        var tc = new Task('c', "[Installer] new MM project: Installer", 3);
+
         //        ============================================================
         //        PHASE 1: Infrastructure
         //        ============================================================
@@ -25,17 +36,12 @@ public class MMGantter {
         var t4 = new Task('4', "[COS] [BET][Monitoring]Display & highlight field caused the error and its location on error description  v2", 7);
         var t5 = new Task('5', "[COS] unify/rename rest.RestTemplate and TLS Templates: DriverEngine => more javish, general name", 4);
         var t6 = new Task('6', "[UI] React pending testing, coverage and quality.", 5);
+        var t7 = new Task('d', "[MM+Jasypt] new MM project: Jasypt with 2 Datasources", 5, t1, t2, t3, tb, tc);
 
-        //        ============================================================
-        //        PHASE 2: Skeleton & deployment
-        //        ============================================================
-
-        var ta = new Task('a', "[DevOps] new repo or add to OpenCONNECT? Jenkins, reports, coverage, etc.", 1);
-        var tb = new Task('b', "[MM] new MM project skeleton", 4, t1, t2, t3);
-        var tc = new Task('c', "[Installer] new MM project: Installer", 3, t1, t2, t3);
-        var td = new Task('d', "[MM+Jasypt] new MM project: Jasypt with 2 Datasources", 5, t1, t2, t3, tb, tc);
-
-        var mmPrototypeCheckPoint = new Task('*', "MM proptotype and infraestructure ready", 1, ta, tb, tc, td);
+        var mmPrototypeCheckPoint = new Task('*', "MM proptotype and infraestructure ready", 1,
+                ta, tb, tc,
+                t1, t2, t3, t4, t5, t6, t7
+        );
 
         //        ============================================================
         //        PHASE 3: MM
@@ -65,15 +71,15 @@ public class MMGantter {
 //        );
 //        gantt.gantterize();
 
-        G g = new G(
+        GeneticGanttr geneticGanttr = new GeneticGanttr(
                 List.of(/*mh,*/ jh, jc, pb, rc, qh),
                 List.of(
-                        t1, t2, t3, t4, t5, t6,
-                        ta, tb, tc, td,
+                        t1, t2, t3, t4, t5, t6, t7,
+                        ta, tb, tc,
                         mmPrototypeCheckPoint,
                         tA, tB, tC, tD, tE, tF, tG, tH, tI, tJ, tK, tL, tM, tN
                 )
         );
-        g.run(10000, 100000);
+        geneticGanttr.run(10000, 100000);
     }
 }

@@ -7,7 +7,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class GanttTasksIteratorTest {
+class GanttCombinationsIteratorTest {
 
     @Test
     void simple() {
@@ -16,7 +16,7 @@ class GanttTasksIteratorTest {
         var t2 = new Task('2', "", 4);
         var t3 = new Task('3', "", 2, t1, t2);
 
-        var sut = new GanttTasksIterator(List.of(t1, t2, t3));
+        var sut = new GanttCombinationsIterator(List.of(t1, t2, t3));
 
         List<Task> processedTasks = new ArrayList<>();
         while (true) {

@@ -37,7 +37,7 @@ public class Ganttr {
 
     protected GanttSolution calculateCombination(int[] combination) {
         var solution = new GanttSolution(users);
-        var t = new GanttTasksIterator(tasks);
+        var t = new GanttCombinationsIterator(tasks);
 
         var task = t.getNextTaskToProcess();
         while (task != null) {

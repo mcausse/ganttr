@@ -1,6 +1,10 @@
-package io.homs.ganttr;
+package io.homs.ganttr.realcases;
 
-import io.homs.ganttr.ga.G;
+import io.homs.ganttr.FinishAsapSolutionsProcessor;
+import io.homs.ganttr.Ganttr;
+import io.homs.ganttr.Task;
+import io.homs.ganttr.User;
+import io.homs.ganttr.ga.GeneticGanttr;
 
 import java.util.List;
 
@@ -47,11 +51,11 @@ public class CorrelationAcksGantter {
         //        -----------------
         //        score:          9876
 
-        G g = new G(
+        GeneticGanttr geneticGanttr = new GeneticGanttr(
                 List.of(mh, jh, jc, pb, rc, qh),
                 List.of(t1, t2, t3, t4, t5, t6, t7, t8, t9, t0)
         );
-        g.run(1000, 10000);
+        geneticGanttr.run(1000, 10000);
 
         //        mh: 111..||33337||||999||9
         //        jh: ||.22||44444||88...||

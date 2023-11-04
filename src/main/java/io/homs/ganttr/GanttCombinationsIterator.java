@@ -4,7 +4,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class GanttTasksIterator {
+public class GanttCombinationsIterator {
 
     static class EndingAtDay {
 
@@ -18,7 +18,7 @@ public class GanttTasksIterator {
     private final List<Task> tasks;
     private final Map<Task, EndingAtDay> processedTasks;
 
-    public GanttTasksIterator(List<Task> tasks) {
+    public GanttCombinationsIterator(List<Task> tasks) {
         this.tasks = tasks;
         this.processedTasks = new LinkedHashMap<>();
     }

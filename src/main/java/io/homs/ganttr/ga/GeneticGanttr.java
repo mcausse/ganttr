@@ -1,44 +1,25 @@
 package io.homs.ganttr.ga;
 
+import io.homs.ganttr.GanttCombinationsIterator;
 import io.homs.ganttr.GanttSolution;
-import io.homs.ganttr.GanttTasksIterator;
 import io.homs.ganttr.Task;
 import io.homs.ganttr.User;
 
 import java.util.*;
 
-public class G {
+public class GeneticGanttr {
 
-    final Random rnd = new Random(1L);
-
-    static class Individual {
-
-        private final int[] combination;
-
-        public Individual(int[] combination) {
-            this.combination = Arrays.copyOf(combination, combination.length);
-        }
-    }
-
-    static class ScoredIndividual {
-        public final Individual individual;
-        public final int fitness;
-
-        public ScoredIndividual(Individual individual, int fitness) {
-            this.individual = individual;
-            this.fitness = fitness;
-        }
-    }
+    private final Random rnd = new Random(1L);
 
     private final List<User> users;
     private final List<Task> tasks;
 
-    public G(List<User> users, List<Task> tasks) {
+    public GeneticGanttr(List<User> users, List<Task> tasks) {
         this.users = users;
         this.tasks = tasks;
     }
 
-    public void run(int numGenerations, int poblationSize) {
+    public GanttSolution run(int numGenerations, int poblationSize) {
 
         int[] adam = new int[tasks.size()];
         for (int i = 0; i < tasks.size(); i++) {
@@ -50,6 +31,7 @@ public class G {
             poblation.add(new Individual(adam));
         }
 
+        GanttSolution bestGenerationSolution = null;
         for (int gen = 0; gen < numGenerations; gen++) {
             List<ScoredIndividual> scoreds = new ArrayList<>();
             for (var individual : poblation) {
@@ -58,9 +40,10 @@ public class G {
             scoreds.sort(Comparator.comparingInt(a -> a.fitness));
 
             // ===
+            // printa el millor individu de la generació
             Individual bestGenerationIndividual = scoreds.get(0).individual;
-            GanttSolution solution = calculateCombination(bestGenerationIndividual.combination);
-            System.out.println(solution.toString());
+            bestGenerationSolution = calculateCombination(bestGenerationIndividual.getCombination());
+            System.out.println(bestGenerationSolution.toString());
             // ===
 
             for (int i = 0; i < poblationSize; i++) {
@@ -71,10 +54,11 @@ public class G {
                 }
             }
         }
+        return bestGenerationSolution;
     }
 
     protected Individual mutate(Individual individual) {
-        int[] combination = Arrays.copyOf(individual.combination, individual.combination.length);
+        int[] combination = Arrays.copyOf(individual.getCombination(), individual.getCombination().length);
 
         do {
             int indexToMutate = rnd.nextInt(tasks.size());
@@ -86,11 +70,10 @@ public class G {
     }
 
     protected int calculateFitnessOf(Individual individuaL) {
-        GanttSolution solution = calculateCombination(individuaL.combination);
+        GanttSolution solution = calculateCombination(individuaL.getCombination());
         int daysToFinish = solution.calculateDaysToFinish();
         int workingUsers = solution.calculateWorkingUsers();
-        int score = calculateScore(daysToFinish, workingUsers);
-        return score;
+        return calculateScore(daysToFinish, workingUsers);
     }
 
     protected static int calculateScore(int daysToFinish, int workingUsers) {
@@ -99,7 +82,7 @@ public class G {
 
     protected GanttSolution calculateCombination(int[] combination) {
         var solution = new GanttSolution(users);
-        var t = new GanttTasksIterator(tasks);
+        var t = new GanttCombinationsIterator(tasks);
 
         var task = t.getNextTaskToProcess();
         while (task != null) {
