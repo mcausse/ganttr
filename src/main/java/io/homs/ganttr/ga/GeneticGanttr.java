@@ -9,7 +9,7 @@ import java.util.*;
 
 public class GeneticGanttr {
 
-    private final Random rnd = new Random(1L);
+    private final Random rnd = new Random(2L);
 
     private final List<User> users;
     private final List<Task> tasks;
@@ -31,8 +31,10 @@ public class GeneticGanttr {
             poblation.add(new Individual(adam));
         }
 
+        int bestScoreOfAllGenerations = Integer.MAX_VALUE;
         GanttSolution bestGenerationSolution = null;
         for (int gen = 0; gen < numGenerations; gen++) {
+
             List<ScoredIndividual> scoreds = new ArrayList<>();
             for (var individual : poblation) {
                 scoreds.add(new ScoredIndividual(individual, calculateFitnessOf(individual)));
@@ -41,9 +43,17 @@ public class GeneticGanttr {
 
             // ===
             // printa el millor individu de la generació
-            Individual bestGenerationIndividual = scoreds.get(0).individual;
-            bestGenerationSolution = calculateCombination(bestGenerationIndividual.getCombination());
-            System.out.println(bestGenerationSolution.toString());
+            System.out.println("generation #" + gen);
+
+            if (bestScoreOfAllGenerations > scoreds.get(0).fitness) {
+                bestScoreOfAllGenerations = scoreds.get(0).fitness;
+                Individual bestGenerationIndividual = scoreds.get(0).individual;
+                bestGenerationSolution = calculateCombination(bestGenerationIndividual.getCombination());
+                System.out.println(bestGenerationSolution.toString());
+                System.out.println("days to finish: " + bestGenerationSolution.calculateDaysToFinish());
+                System.out.println("score:          " + scoreds.get(0).fitness);
+                System.out.println();
+            }
             // ===
 
             for (int i = 0; i < poblationSize; i++) {
@@ -54,6 +64,14 @@ public class GeneticGanttr {
                 }
             }
         }
+
+        // ===
+        // printa la info de tasques
+        for (Task task : tasks) {
+            System.out.println(task.code + ": " + task.description + " (" + task.durationInDays + ")");
+        }
+        System.out.println("=> total " + tasks.size() + " tasks.");
+        // ===
         return bestGenerationSolution;
     }
 
