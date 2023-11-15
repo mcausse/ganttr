@@ -58,6 +58,8 @@ public class Ganttr {
 
             task = t.getNextTaskToProcess();
         }
+
+        t.verifyDeadTasksAtFinish();
         return solution;
     }
 }

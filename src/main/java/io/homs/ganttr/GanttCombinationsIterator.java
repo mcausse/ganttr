@@ -42,4 +42,10 @@ public class GanttCombinationsIterator {
     public int getProcessedTaskEndingDay(Task task) {
         return this.processedTasks.get(task).day;
     }
+
+    public void verifyDeadTasksAtFinish() {
+        if (!processedTasks.keySet().containsAll(tasks)) {
+            throw new RuntimeException("there are some task dead at the end of process");
+        }
+    }
 }

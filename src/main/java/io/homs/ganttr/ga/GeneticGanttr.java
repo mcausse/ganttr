@@ -82,7 +82,7 @@ public class GeneticGanttr {
             int indexToMutate = rnd.nextInt(tasks.size());
             int mutatedValue = rnd.nextInt(users.size());
             combination[indexToMutate] = mutatedValue;
-        } while (rnd.nextInt(100) < 25);
+        } while (rnd.nextInt(100) < 35);
 
         return new Individual(combination);
     }
