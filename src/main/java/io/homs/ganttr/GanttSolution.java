@@ -99,6 +99,32 @@ public class GanttSolution {
             r.append(user.name);
             r.append(": ");
             r.append(userSolution.get(user).toString());
+            var line = userSolution.get(user).toString();
+            for (char c : line.toCharArray()) {
+
+            }
+            r.append('\n');
+        }
+        return r.toString();
+    }
+
+    public String toString(List<Task> tasks) {
+        var r = new StringBuilder();
+        for (var user : userSolution.keySet()) {
+            r.append(user.name);
+            r.append(": ");
+//            r.append(userSolution.get(user).toString());
+            var line = userSolution.get(user).toString();
+            for (char c : line.toCharArray()) {
+                if (c == '.') {
+                    r.append("..");
+                } else if (c == '|') {
+                    r.append("[]");
+                } else {
+                    String taskLabel = tasks.stream().filter(t -> t.code == c).findFirst().get().label;
+                    r.append(taskLabel);
+                }
+            }
             r.append('\n');
         }
         return r.toString();

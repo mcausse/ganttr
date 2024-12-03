@@ -31,9 +31,9 @@ class GeneticGanttrTest {
         // Act
         GanttSolution best = geneticGanttr.run(100, 1000);
 
-        System.out.println(best);
+        System.out.println(best.toString());
         assertThat(best).hasToString(
-                "mh: 11133||33444||||...||\n" +
+                        "mh: 11133||33444||||...||\n" +
                         "jh: ||.22||.....||.....||\n" +
                         "jc: .....||||...||.....||\n"
         );

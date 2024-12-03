@@ -1,5 +1,6 @@
 package io.homs.ganttr.realcases;
 
+import io.homs.ganttr.GanttCombinationsIterator;
 import io.homs.ganttr.Task;
 import io.homs.ganttr.User;
 import io.homs.ganttr.ga.GeneticGanttr;
@@ -67,8 +68,8 @@ public class MMGantter {
         //        standardized the error message like  "error description itself, reason/context, mitigation (check entity, field, value)".
         //                List of errors: https://docs.google.com/spreadsheets/d/1ehUdRLPog40tWjN_PxenWYpwdJQ667YVJZlDeoJDgbk/edit#gid=473892287
 
-        var t7 = new Task('7', "[COS] unify/rename rest.RestTemplate and TLS Templates: DriverEngine => more javish, general name", 4);
-        var t8 = new Task('8', "[UI] React pending testing, coverage and quality.", 5);
+        var t7 = new Task('7', "[COS] unify/rename rest.RestTemplate and TLS Templates: DriverEngine => more javish, general name", 3);
+        var t8 = new Task('8', "[UI] React pending testing, coverage and quality.", 20);
         var t9 = new Task('9', "[MM+Jasypt] new MM project: Jasypt with 2 Datasources", 6, t3, t4, t5, t1, t2);
         //        LISConfig, installer-commons, YAML, ...
 
@@ -130,15 +131,69 @@ public class MMGantter {
                 )
         );
 
-        //        generation #190
-        //        jh: 111||||||111|||2222||66666||AAAA*||DJJJJ||JJJJL||LNN..||.....||.....||.....||
-        //        jc: |||||||||||||||||||||bbbb7||7777.||KHHHH||HKKKK||.....||.....||.....||.....||
-        //        pb: 5555a||||||||||||||||333B.||.....||EEEEE||FFFFF||.....||.....||.....||.....||
+        //        generation #99
+        //        jh: 022||||||224|||444|||55577||7ZZZ.||__..|||..IGG||GGGHH||HHHI|||IIINN||NNN..||
+        //        jc: |||||||||||||||||||||11116||66666||6C**|||**CCC||CCCCC||CEEE|||EE...||.....||
+        //        pb: 33333||||||||||||||||3AAA9||99999||A...|||..FFF||FFKKK||KK.B|||LL...||.....||
         //        rc: ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||....||.....||
-        //        qh: 44444||||||||||44cc||cCCCC||CCCCC||CGGGG||GIIII||IMMMM||M....||.....||.....||
+        //        qh: 88888||||||||||888|||88888||88888||88..|||..DJJ||JJJJJ||JMMM|||.....||.....||
         //
-        //        days to finish: 57
-        //        score:          574
-        geneticGanttr.run(1000, 100000);
+        //        days to finish: 73
+        //        score:          734
+
+        //        generation #474
+        //        jh: 088||||||888|||888|||88888||88888||88..|||...DE||EEEEI||IIII|||LLNNN||NN...||
+        //        jc: |||||||||||||||||||||66666||66ZZZ||.__*|||***KJ||JJJJJ||JJKK|||KK...||.....||
+        //        pb: 11112||||||||||||||||22277||7AAAA||....|||...FF||FFFHH||HHH.|||.....||.....||
+        //        rc: ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||B...||.....||
+        //        qh: 33333||||||||||344|||44555||99999||9CCC|||CCCCC||CCGGG||GGMM|||M....||.....||
+        //
+        //        days to finish: 72
+        //        score:          725
+        geneticGanttr.run(500, 100000);
+
+        new MMGantter().drawGantt(
+                List.of(
+                        t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t_,
+                        mmPrototypeCheckPoint,
+                        tA, tB, tC, tD, tE, tF, tG, tH, tI, tJ, tK, tL, tM, tN,
+                        tZ
+                )
+        );
+
+    }
+
+    protected void drawGantt(List<Task> tasks) {
+//        var solution = new GanttSolution(users);
+        var t = new GanttCombinationsIterator(tasks);
+
+        var task = t.getNextTaskToProcess();
+        while (task != null) {
+
+            int taskStartingDay = 0;
+            for (var dep : task.dependencies) {
+                int depEndingDay = t.getProcessedTaskEndingDay(dep);
+                if (taskStartingDay < depEndingDay) {
+                    taskStartingDay = depEndingDay;
+                }
+            }
+
+            int taskCombinationIndex = tasks.indexOf(task);
+//            int userIndex = combination[taskCombinationIndex];
+//            User userToExecuteTheTask = users.get(userIndex);
+//            int taskEndingDay = solution.addTaskTo(userToExecuteTheTask, task, taskStartingDay);
+//            t.markTaskAsProcessedEndingAtDay(task, taskEndingDay);
+            t.markTaskAsProcessedEndingAtDay(task, taskStartingDay + task.durationInDays);
+
+            for (int i = 0; i < taskStartingDay; i++) {
+                System.out.print('.');
+            }
+            for (int i = 0; i < task.durationInDays; i++) {
+                System.out.print(task.code);
+            }
+            System.out.println();
+
+            task = t.getNextTaskToProcess();
+        }
     }
 }

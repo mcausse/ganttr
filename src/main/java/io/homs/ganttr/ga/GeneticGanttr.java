@@ -49,7 +49,7 @@ public class GeneticGanttr {
                 bestScoreOfAllGenerations = scoreds.get(0).fitness;
                 Individual bestGenerationIndividual = scoreds.get(0).individual;
                 bestGenerationSolution = calculateCombination(bestGenerationIndividual.getCombination());
-                System.out.println(bestGenerationSolution.toString());
+                System.out.println(bestGenerationSolution.toString(tasks));
                 System.out.println("days to finish: " + bestGenerationSolution.calculateDaysToFinish());
                 System.out.println("score:          " + scoreds.get(0).fitness);
                 System.out.println();
